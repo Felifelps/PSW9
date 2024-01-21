@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 {% load static %}
 {% block 'cabecalho' %}
- <link href="{% static 'usuarios/css/cadastro.css' %}" rel="stylesheet">
- <link href="{% static 'flashcard/css/novo_flashcard.css' %}" rel="stylesheet">
- <link href="{% static 'flashcard/css/iniciar_desafio.css' %}" rel="stylesheet">
- <link href="{% static 'flashcard/css/desafio.css' %}" rel="stylesheet">
- <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="{% static 'usuarios/css/cadastro.css' %}" rel="stylesheet">
+    <link href="{% static 'flashcard/css/novo_flashcard.css' %}" rel="stylesheet">
+    <link href="{% static 'flashcard/css/iniciar_desafio.css' %}" rel="stylesheet">
+    <link href="{% static 'flashcard/css/desafio.css' %}" rel="stylesheet">
+    <link href="{% static 'flashcard/css/relatorio.css' %}" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 {% endblock 'cabecalho' %}
 {% block 'conteudo' %}
     <div class="container">
@@ -24,6 +25,40 @@
                 </div>
             </div>
         </div>
+        <div class='border-ontop'>
+            <h2> Melhores categorias </h2>
+            <div class='container-categoria'>
+                {% if melhores %}
+                    {% for categoria in melhores%}
+                        <div class='categoria'>
+                            <p class='titulo'> {{ categoria.0 }} </p>
+                            <div class='dados'>
+                                <p> Acertos: {{ categoria.1 }}</p>
+                                <p> Erros: {{ categoria.2 }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>Em nenhuma matéria houveram mais acertos do que erros. </p>
+                {% endif %}
+            </div>
+            <h2> Piores categorias </h2>
+            <div class='container-categoria'>
+                {% if piores %}
+                    {% for categoria in piores %}
+                        <div class='categoria'>
+                            <p class='titulo'> {{ categoria.0 }} </p>
+                            <p> Acertos: {{ categoria.1 }}</p>
+                            <p> Erros: {{ categoria.2 }}</p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>Em nenhuma matéria houveram mais erros do que acertos. </p>
+                {% endif %}
+            </div>
+        </div>
+        <br>
+        <br>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -49,7 +84,7 @@
         new Chart(ctx2, {
             type: 'radar',
             data: {
-                labels: {{ categorias }},
+                labels: {{ categorias | safe}},
                 datasets: [{
                     label: 'Qtd',
                     data: {{ grafico2 }},

@@ -91,7 +91,7 @@
                 <br>
                     {% for flashcard in flashcards %}
                         <div class="box-new-flashcard" onclick="flipCard('resposta-{{ flashcard.id }}');">
-                            <div class="flashcard ">
+                            <div class="flashcard {{ flashcard.css_dificuldade }}">
                                 <div class="flashcard-categoria">
                                     {{ flashcard.categoria.nome }}
                                 </div>

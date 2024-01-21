@@ -220,21 +220,37 @@ def relatorio(request, id):
     grafico2 = []
     categorias = []
 
+    melhores = []
+    piores = []
+
     for categoria in des.categoria.all():
         categorias.append(categoria.nome)
         grafico2.append(
             acertados.filter(flashcard__categoria=categoria).count()
         )
+        
+        questoes = des.flashcards.filter(
+            respondido=True
+        ).filter(
+            flashcard__categoria=categoria
+        )
+        acertados = questoes.filter(acertou=True)
+        errados = questoes.filter(acertou=False)
 
-
+        if acertados.count() > errados.count():
+            melhores.append((categoria.nome, acertados.count(), errados.count()))
+        else:
+            piores.append((categoria.nome, acertados.count(), errados.count()))
 
     return render(
-        request, 
+        request,
         'relatorio.html',
         {
             'desafio': des,
             'grafico1': grafico1,
             'grafico2': grafico2,
-            'categorias': categorias
+            'categorias': categorias,
+            'melhores': melhores,
+            'piores': piores
         }
     )
